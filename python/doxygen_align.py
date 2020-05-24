@@ -17,6 +17,8 @@ def doxygen_align(arg):
         m = re.match('^\s*\/?\*+\s*(.*)$', line)
         content += m.group(1) + '\n'
 
+    # Configure regex patterns.
+    # Not the best regex but gets the job done for now.
     ppre = '\s*'
     pbrief = '{}(@brief)\s+(.+?(?=@|$|\n\n))'.format(ppre)
     pparam = '{}(@t?param(?:\[(?:in|out|in,\s*out)?\])?)\s+(\w+)\s+(.+?(?=@|$))'.format(ppre)
@@ -26,10 +28,11 @@ def doxygen_align(arg):
         pbrief, pparam, preturn, pany)
     entries = re.findall(pattern, content, re.S)
 
+    # Determine indentations.
+    # FIXME(yycho0108): There's probably a better way to do this.
     c0 = indent  # size of cell 0, indentation
     c1 = 0
     c2 = 0
-
     for entry in entries:
         if entry[0]:
             # brief
@@ -53,6 +56,7 @@ def doxygen_align(arg):
             out.append(prefix + r)
         return out
 
+    # Build output.
     out = ''
     prefix = ' '.ljust(c0+1) + '* '
     for entry in entries:
@@ -91,14 +95,17 @@ def doxygen_align(arg):
             # Optional: Add additional newline below long description
             out += (prefix + '\n')
     out = ' ' * c0 + '/**\n' + out + ' ' * (c0+1) + '*/'
-    with open('/tmp/debug.txt', 'w+') as f:
-        f.write(out)
     return out
 
 
 def main():
     arg = open('sample.txt').read()
     out = doxygen_align(arg)
+
+    print('<in>')
+    print(arg)
+    print('</in>')
+
     print('<out>')
     print(out)
     print('</out>')
