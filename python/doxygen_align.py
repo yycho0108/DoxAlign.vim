@@ -13,7 +13,7 @@ def doxygen_align(arg):
 
     # Determine content.
     content = ''
-    for line in arg.split('\n')[1:-1]:
+    for line in arg.strip().split('\n')[1:-1]:
         m = re.match('^\s*\/?\*+\s*(.*)$', line)
         content += m.group(1) + '\n'
 
@@ -111,17 +111,30 @@ def doxygen_align(arg):
 
 
 def main():
+    #arg = \
+    #    '''  /**
+    #* @brief  Function description.
+    #*
+    #* Long description .............
+    #* @tparam X x
+    #* @param  alpha   loerm ipsum dolor sit amet why do I remember such text and
+    #* blah blah alpha beta alpha beta alpha beta mega gamma
+    #* @param  beta     hmm
+    #* @return The      input pointer `beta` offset by `alpha`. Long ass comment long ass comment
+    #*/ '''
+
     arg = \
-        '''  /**
-    * @brief  Function description.
-    *
-    * Long description .............
-    * @tparam X x
-    * @param  alpha   loerm ipsum dolor sit amet why do I remember such text and
-    * blah blah alpha beta alpha beta alpha beta mega gamma
-    * @param  beta     hmm
-    * @return The      input pointer `beta` offset by `alpha`. Long ass comment long ass comment
-    */ '''
+            """/**
+   * Search the indexed data structure at the specified recursion level.
+   *
+   * @param[in]  point  The query point.
+   * @param[in]  node   The KdTree node at the current level.
+   * @param[in]  level  The current recursion depth of the search.
+   * @param[in]  pmin   The minimum extents of the current bounding box.
+   * @param[in]  pmax   The maximum extents of the current bounding box.
+   * @param[out] q      The container with custom point acceptance criteria.
+   */
+   """
 
     out = doxygen_align(arg)
     print('<out>')
