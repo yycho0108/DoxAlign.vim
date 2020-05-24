@@ -101,7 +101,11 @@ def doxygen_align(arg):
                 out += row + '\n'
         elif entry[7].strip():
             # long
-            out += (prefix + re.sub('\s+', ' ', entry[7].strip())) + ('\n')
+            lhs = prefix
+            rhs = re.sub('\s+', ' ', entry[7].strip())
+            for row in wrap_with_prefix(
+                    prefix, lhs, rhs):
+                out += row + '\n'
             # Optional: Add additional newline below long description
             out += (prefix + '\n')
     out = ' ' * c0 + '/**\n' + out + ' ' * (c0+1) + '*/'
@@ -123,18 +127,26 @@ def main():
     #* @return The      input pointer `beta` offset by `alpha`. Long ass comment long ass comment
     #*/ '''
 
+    # arg = \
+    #         """/**
+    #* Search the indexed data structure at the specified recursion level.
+    #*
+    #* @param[in]  point  The query point.
+    #* @param[in]  node   The KdTree node at the current level.
+    #* @param[in]  level  The current recursion depth of the search.
+    #* @param[in]  pmin   The minimum extents of the current bounding box.
+    #* @param[in]  pmax   The maximum extents of the current bounding box.
+    #* @param[out] q      The container with custom point acceptance criteria.
+    #*/"""
+
     arg = \
             """/**
-   * Search the indexed data structure at the specified recursion level.
+   * Build the indexed data structure. Thin wrapper around
+   * the index and bounding extent computation functions.
    *
-   * @param[in]  point  The query point.
-   * @param[in]  node   The KdTree node at the current level.
-   * @param[in]  level  The current recursion depth of the search.
-   * @param[in]  pmin   The minimum extents of the current bounding box.
-   * @param[in]  pmax   The maximum extents of the current bounding box.
-   * @param[out] q      The container with custom point acceptance criteria.
-   */
-   """
+   * @see BuildIndex, ComputeExtents.
+   */"""
+
 
     out = doxygen_align(arg)
     print('<out>')
