@@ -26,16 +26,15 @@ Plugin 'yycho0108/DoxAlign.vim'
 call toop#mapFunction('DoxAlign', "<leader>da")"
 ```
 
-## Running
+## How to use
 
 Now, pressing `vac<leader>da` will format the comment object under the cursor.
 
 ## Sample
 
-
-## Sample run
-
 Random text generated from [here](https://www.weirdhat.com/gibberish.php).
+
+The same file can be seen in the [sample text](./python/sample.txt)
 
 Input:
 
