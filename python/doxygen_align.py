@@ -42,8 +42,6 @@ def doxygen_align(arg):
         elif entry[7]:
             # long
             pass
-    print(c0, c1, c2)
-    print('==Final==')
 
     def wrap_with_prefix(prefix, lhs, rhs, maxlen=80):
         out = []
@@ -101,6 +99,8 @@ def doxygen_align(arg):
             # Optional: Add additional newline below long description
             out += (prefix + '\n')
     out = ' ' * c0 + '/**\n' + out + ' ' * (c0+1) + '*/'
+    with open('/tmp/debug.txt', 'w+') as f:
+        f.write(out)
     return out
 
 
