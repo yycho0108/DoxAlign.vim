@@ -17,7 +17,7 @@ def doxygen_align(arg):
 
     ppre = '\s*'
     pbrief = '{}(@brief)\s+(.+?(?=@|$|\n\n))'.format(ppre)
-    pparam = '{}(@t?param(?:\[(in|out|in,\s*out)?\])?)\s+(\w+)\s+(.+?(?=@|$))'.format(ppre)
+    pparam = '{}(@t?param(?:\[(?:in|out|in,\s*out)?\])?)\s+(\w+)\s+(.+?(?=@|$))'.format(ppre)
     preturn = '{}(@return)\s+(.+?(?=@|$))'.format(ppre)
     pany = '(.+?(?=@|$))'
     pattern = '(?:(?:{})|(?:{})|(?:{})|(?:{}))'.format(
