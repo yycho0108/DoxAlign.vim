@@ -10,7 +10,6 @@ endif
 python3 << EOF
 # Resolve argument.
 import vim
-arg = vim.eval("a:arg")
 
 # Resolve function.
 import sys
