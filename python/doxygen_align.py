@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 import re
+import textwrap
 
 
 def doxygen_align(arg):
@@ -45,24 +47,28 @@ def doxygen_align(arg):
 
     def wrap_with_prefix(prefix, lhs, rhs, maxlen=80):
         out = []
-        o = lhs
-        if False:
-            # Wrap at char boundary
-            while rhs:
-                d = maxlen - len(o)
-                out.append(o + rhs[:d])
-                rhs = rhs[d:]
-                o = prefix
-        else:
-            # Wrap at word boundary
-            for w in re.finditer('\w+', rhs):
-                w = w.group(0)
-                if len(o + ' ' + w) <= maxlen:
-                    o += ' ' + w
-                else:
-                    out.append(o)
-                    o = prefix
-            out.append(o)
+        rr = textwrap.wrap(rhs, maxlen - len(prefix))
+        out.append(lhs + rr[0])
+        for r in rr[1:]:
+            out.append(prefix + r)
+        # o = lhs
+        #if False:
+        #    # Wrap at char boundary
+        #    while rhs:
+        #        d = maxlen - len(o)
+        #        out.append(o + rhs[:d])
+        #        rhs = rhs[d:]
+        #        o = prefix
+        #else:
+        #    # Wrap at word boundary
+        #    for w in re.finditer('\w+', rhs):
+        #        w = w.group(0)
+        #        if len(o + ' ' + w) <= maxlen:
+        #            o += ' ' + w
+        #        else:
+        #            out.append(o)
+        #            o = prefix
+        #    out.append(o)
         return out
 
     out = ''
