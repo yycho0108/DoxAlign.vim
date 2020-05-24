@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 import re
+import textwrap
 
 
 def doxygen_align(arg):
@@ -11,13 +13,13 @@ def doxygen_align(arg):
 
     # Determine content.
     content = ''
-    for line in arg.split('\n')[1:-1]:
+    for line in arg.strip().split('\n')[1:-1]:
         m = re.match('^\s*\/?\*+\s*(.*)$', line)
         content += m.group(1) + '\n'
 
     ppre = '\s*'
     pbrief = '{}(@brief)\s+(.+?(?=@|$|\n\n))'.format(ppre)
-    pparam = '{}(@t?param)\s+(\w+)\s+(.+?(?=@|$))'.format(ppre)
+    pparam = '{}(@t?param(?:\[(?:in|out|in,\s*out)?\])?)\s+(\w+)\s+(.+?(?=@|$))'.format(ppre)
     preturn = '{}(@return)\s+(.+?(?=@|$))'.format(ppre)
     pany = '(.+?(?=@|$))'
     pattern = '(?:(?:{})|(?:{})|(?:{})|(?:{}))'.format(
@@ -42,29 +44,31 @@ def doxygen_align(arg):
         elif entry[7]:
             # long
             pass
-    print(c0, c1, c2)
-    print('==Final==')
 
     def wrap_with_prefix(prefix, lhs, rhs, maxlen=80):
         out = []
-        o = lhs
-        if False:
-            # Wrap at char boundary
-            while rhs:
-                d = maxlen - len(o)
-                out.append(o + rhs[:d])
-                rhs = rhs[d:]
-                o = prefix
-        else:
-            # Wrap at word boundary
-            for w in re.finditer('\w+', rhs):
-                w = w.group(0)
-                if len(o + ' ' + w) <= maxlen:
-                    o += ' ' + w
-                else:
-                    out.append(o)
-                    o = prefix
-            out.append(o)
+        rr = textwrap.wrap(rhs, maxlen - len(prefix))
+        out.append(lhs + rr[0])
+        for r in rr[1:]:
+            out.append(prefix + r)
+        # o = lhs
+        #if False:
+        #    # Wrap at char boundary
+        #    while rhs:
+        #        d = maxlen - len(o)
+        #        out.append(o + rhs[:d])
+        #        rhs = rhs[d:]
+        #        o = prefix
+        #else:
+        #    # Wrap at word boundary
+        #    for w in re.finditer('\w+', rhs):
+        #        w = w.group(0)
+        #        if len(o + ' ' + w) <= maxlen:
+        #            o += ' ' + w
+        #        else:
+        #            out.append(o)
+        #            o = prefix
+        #    out.append(o)
         return out
 
     out = ''
@@ -97,25 +101,52 @@ def doxygen_align(arg):
                 out += row + '\n'
         elif entry[7].strip():
             # long
-            out += (prefix + re.sub('\s+', ' ', entry[7].strip())) + ('\n')
+            lhs = prefix
+            rhs = re.sub('\s+', ' ', entry[7].strip())
+            for row in wrap_with_prefix(
+                    prefix, lhs, rhs):
+                out += row + '\n'
             # Optional: Add additional newline below long description
             out += (prefix + '\n')
     out = ' ' * c0 + '/**\n' + out + ' ' * (c0+1) + '*/'
+    with open('/tmp/debug.txt', 'w+') as f:
+        f.write(out)
     return out
 
 
 def main():
+    #arg = \
+    #    '''  /**
+    #* @brief  Function description.
+    #*
+    #* Long description .............
+    #* @tparam X x
+    #* @param  alpha   loerm ipsum dolor sit amet why do I remember such text and
+    #* blah blah alpha beta alpha beta alpha beta mega gamma
+    #* @param  beta     hmm
+    #* @return The      input pointer `beta` offset by `alpha`. Long ass comment long ass comment
+    #*/ '''
+
+    # arg = \
+    #         """/**
+    #* Search the indexed data structure at the specified recursion level.
+    #*
+    #* @param[in]  point  The query point.
+    #* @param[in]  node   The KdTree node at the current level.
+    #* @param[in]  level  The current recursion depth of the search.
+    #* @param[in]  pmin   The minimum extents of the current bounding box.
+    #* @param[in]  pmax   The maximum extents of the current bounding box.
+    #* @param[out] q      The container with custom point acceptance criteria.
+    #*/"""
+
     arg = \
-        '''  /**
-    * @brief  Function description.
-    *
-    * Long description .............
-    * @tparam X x
-    * @param  alpha   loerm ipsum dolor sit amet why do I remember such text and
-    * blah blah alpha beta alpha beta alpha beta mega gamma
-    * @param  beta     hmm
-    * @return The      input pointer `beta` offset by `alpha`. Long ass comment long ass comment
-    */ '''
+            """/**
+   * Build the indexed data structure. Thin wrapper around
+   * the index and bounding extent computation functions.
+   *
+   * @see BuildIndex, ComputeExtents.
+   */"""
+
 
     out = doxygen_align(arg)
     print('<out>')
