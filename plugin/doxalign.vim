@@ -28,7 +28,7 @@ arg = vim.eval("a:arg")
 out = doxygen_align(arg)
 EOF
 
-return pyeval('out')
+return py3eval('out')
 endfunction
 
 " #pragma once
