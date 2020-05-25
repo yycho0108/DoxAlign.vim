@@ -7,7 +7,11 @@ This is my first plugin, so it's probably very rough. Any feedback is welcome.
 ## Dependencies
 
 - `glts/vim-textobj-comment.git`
-- [optional] `jeanCarloMachado/vim-toop`
+- [optional] `yycho0108/vim-toop`
+
+(Note that [`yycho0108/vim-toop`](https://github.com/yycho0108/vim-toop) is a fork of
+[`jeanCarloMachado/vim-toop`](https://github.com/jeanCarloMachado/vim-toop) with a minor change)
+
 
 ## Configuration
 
@@ -28,7 +32,9 @@ call toop#mapFunction('DoxAlign', "<leader>da")"
 
 ## How to use
 
-Now, pressing `vac<leader>da` will format the comment object under the cursor.
+Now, pressing `vac<leader>da` or `<leader>daac` will format the comment object under the cursor.
+
+(A mapping like `<leader>daac` will only work with the forked `vim-toop` repo, due to repeated `a` character)
 
 ## Sample
 

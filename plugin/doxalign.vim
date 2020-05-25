@@ -16,7 +16,7 @@ import sys
 from os.path import normpath, join
 plugin_root_dir = vim.eval('s:plugin_root_dir')
 python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
-sys.path.insert(0, python_root_dir)
+sys.path.append(python_root_dir)
 from doxygen_align import doxygen_align
 EOF
 
